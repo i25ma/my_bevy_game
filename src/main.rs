@@ -3,9 +3,9 @@ use bevy::prelude::*;
 
 fn main() {
     App::new()
-    .add_plugins(DefaultPlugins)
-    .add_systems(Startup, add_peple)
-    .add_systems(Update, (hello_world, greet_people))
+    .add_plugins((DefaultPlugins, HelloPlugin))
+    // .add_systems(Startup, add_peple)
+    // .add_systems(Update, (hello_world, greet_people))
     .run();
 }
 
@@ -41,7 +41,7 @@ struct Person;
 #[derive(Component)]
 struct Name(String);
 
-fn add_peple(mut commands: Commands) {
+fn add_people(mut commands: Commands) {
     commands.spawn((Person, Name("zhangsan".to_string())));
     commands.spawn((Person, Name("lisi".to_string())));
     commands.spawn((Person, Name("wangwu".to_string())));
@@ -50,5 +50,15 @@ fn add_peple(mut commands: Commands) {
 fn greet_people(query: Query<&Name, With<Person>>) {
     for name in &query {
         println!("hello {}!", name.0);
+    }
+}
+
+
+pub struct HelloPlugin;
+
+impl Plugin for HelloPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, add_people)
+        .add_systems(Update, (hello_world, greet_people));
     }
 }
