@@ -3,6 +3,7 @@ use bevy::prelude::*;
 
 fn main() {
     App::new()
+    .add_plugins(DefaultPlugins)
     .add_systems(Startup, add_peple)
     .add_systems(Update, (hello_world, greet_people))
     .run();
